@@ -1,48 +1,64 @@
-<div class="register-container">
-	<h2>Crie sua conta</h2>
+<div class="flex justify-center items-center h-screen bg-gray-100">
+	<div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
+		<div class="m-5">
+			<h2 class="text-2xl font-semibold mb-4">
+				Abra sua conta no <span class="text-blue-600">seaPay</span>
+			</h2>
+			<p class="mb-6 text-gray-600">
+				Complete os campos abaixo para abrir sua conta seaPay:
+			</p>
 
-	<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-		<div>
-			<label for="email">Email</label>
-			<input type="email" id="email" formControlName="email" placeholder="Digite seu email" />
-			<div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
-				Email inválido.
-			</div>
+			<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+				<div class="mb-4">
+					<label for="email" class="block text-sm font-medium text-gray-700">E-mail*</label>
+					<input type="email" formControlName="email" id="email" placeholder="exemplo@email.com"
+						   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+				</div>
+
+				<div class="mb-4">
+					<label for="password" class="block text-sm font-medium text-gray-700">Senha*</label>
+					<input type="password" formControlName="password" id="password"
+						   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+				</div>
+
+				<div class="mb-4">
+					<label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirme sua
+						senha*</label>
+					<input type="password" formControlName="confirmPassword" id="confirmPassword"
+						   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+				</div>
+
+				<div class="mb-6">
+					<input type="checkbox" id="isShopkeeper" (change)="toggleAccountType()" [checked]="isShopkeeper"
+						   class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+					<label for="isShopkeeper" class="ml-2 text-gray-700">Conta para lojista</label>
+					<p class="text-sm text-gray-600 mt-1">*Contas para lojistas não são aptas a realizar transferências,
+						apenas receber.</p>
+				</div>
+
+				<div class="mb-4">
+					<label for="name"
+						   class="block text-sm font-medium text-gray-700">{{ isShopkeeper ? 'Razão Social*' : 'Nome Completo*' }}</label>
+					<input type="text" formControlName="name" id="name"
+						   placeholder="{{ isShopkeeper ? 'Razão social da empresa' : 'João da Silva' }}"
+						   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+				</div>
+
+				<div class="mb-6">
+					<label for="registration"
+						   class="block text-sm font-medium text-gray-700">{{ isShopkeeper ? 'CNPJ*' : 'CPF*' }}</label>
+					<input type="text" formControlName="registration" id="registration"
+						   placeholder="{{ isShopkeeper ? '00.000.000/0000-00' : '000.000.000-00' }}"
+						   class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+				</div>
+
+				<div class="flex justify-center items-center">
+					<button type="submit"
+							class="bg-blue-600 text-white py-2 px-4 rounded-md shadow hover:bg-blue-700 transition">
+						Enviar
+					</button>
+				</div>
+			</form>
 		</div>
-
-		<div>
-			<label for="password">Senha</label>
-			<input type="password" id="password" formControlName="password" placeholder="Digite sua senha" />
-			<div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-				A senha deve ter pelo menos 6 caracteres.
-			</div>
-		</div>
-
-		<div>
-			<label for="accountType">Tipo de Conta</label>
-			<select id="accountType" formControlName="accountType">
-				<option value="standard">Pessoal</option>
-				<option value="shopkeeper">Lojista</option>
-			</select>
-		</div>
-
-		<div>
-			<label for="name">Nome Completo</label>
-			<input type="text" id="name" formControlName="name" placeholder="Digite seu nome" />
-		</div>
-
-		<div>
-			<label for="registration">CPF ou CNPJ</label>
-			<input type="text" id="registration" formControlName="registration" placeholder="Digite seu CPF ou CNPJ" />
-			<div *ngIf="registerForm.get('registration')?.invalid && registerForm.get('registration')?.touched">
-				CPF ou CNPJ inválido.
-			</div>
-		</div>
-
-		<div *ngIf="errorMessage" class="error">
-			{{ errorMessage }}
-		</div>
-
-		<button type="submit">Registrar</button>
-	</form>
+	</div>
 </div>

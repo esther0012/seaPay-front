@@ -1,32 +1,43 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import {HttpClientModule} from "@angular/common/http";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { MessageService } from "primeng/api";
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  imports: [ReactiveFormsModule, NgIf, HttpClientModule]
+  standalone: true,
+  imports: [
+    ReactiveFormsModule
+  ],
+  providers: [MessageService]
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  errorMessage: string = '';
+  isShopkeeper: boolean = false;
 
   constructor(
       private authService: AuthService,
-      private router: Router
+      private router: Router,
+      private messageService: MessageService
   ) {
     this.registerForm = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl('', [Validators.required]),
       accountType: new FormControl('standard', [Validators.required]),
       name: new FormControl('', Validators.required),
       registration: new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(18)])
     });
+  }
+
+  toggleAccountType(): void {
+    this.isShopkeeper = !this.isShopkeeper;
+    this.registerForm.controls['accountType'].setValue(this.isShopkeeper ? 'shopkeeper' : 'standard');
+    this.registerForm.controls['name'].setValue('');
+    this.registerForm.controls['registration'].setValue('');
   }
 
   onSubmit(): void {
@@ -36,14 +47,15 @@ export class RegisterComponent {
       this.authService.register(email, password, accountType, name, registration)
           .subscribe({
             next: () => {
+              this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bem-vindo ao seaPay!' });
               this.router.navigate(['/login']);
             },
             error: () => {
-              this.errorMessage = 'Falha ao realizar o registro. Tente novamente.';
+              this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao realizar o registro. Tente novamente.' });
             }
           });
     } else {
-      this.errorMessage = 'Por favor, preencha todos os campos corretamente.';
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Por favor, preencha todos os campos corretamente.' });
     }
   }
 }
