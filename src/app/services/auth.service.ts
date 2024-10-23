@@ -28,7 +28,7 @@ export class AuthService {
 
 
     getAuthenticatedUser(): Observable<any> {
-        return this.http.get(`${this.apiUrl}/auth/user`);
+        return this.http.get(`${this.apiUrl}/auth/authenticated-user`);
     }
 
     refreshToken() {
@@ -45,4 +45,15 @@ export class AuthService {
         this.router.navigate(['/login']);
     }
 
+    getRecentTransactions(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/transactions`);
+    }
+
+    getMyContacts(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/contacts`);
+    }
+
+    addContact(contact: { user_id: number }): Observable<any> {
+        return this.http.post(`${this.apiUrl}/contacts`, contact);
+    }
 }

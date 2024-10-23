@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { MessageService } from "primeng/api";
@@ -10,7 +10,8 @@ import { MessageService } from "primeng/api";
   styleUrls: ['./register.component.css'],
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   providers: [MessageService]
 })
@@ -47,7 +48,7 @@ export class RegisterComponent {
       this.authService.register(email, password, accountType, name, registration)
           .subscribe({
             next: () => {
-              this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Bem-vindo ao seaPay!' });
+              this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Tudo pronto, agora você já pode acessar a sua conta através do painel de Login.' });
               this.router.navigate(['/login']);
             },
             error: () => {
